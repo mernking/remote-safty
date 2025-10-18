@@ -1,0 +1,18 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+#hero {
+  /* * The first part of background-image is the semi-transparent black overlay.
+   * rgba(0, 0, 0, 0.5) is Black at 50% opacity. Adjust the '0.5' to make it 
+   * lighter (0.1) or darker (0.8).
+   * * The second part is your actual image.
+   */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.829), rgba(0, 0, 0, 0.658)),
+    url("/images/ttten.svg");
+
+  background-size: cover;
+  background-position: center;
+
+  /* You can remove position: relative; if you use this method, as no 
+     absolute positioning is needed. */
+}

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">saftz</string>
+    <string name="title_activity_main">saftz</string>
+    <string name="package_name">com.saftz.app</string>
+    <string name="custom_url_scheme">com.saftz.app</string>
+</resources>

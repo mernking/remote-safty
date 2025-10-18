@@ -1,0 +1,195 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+   id         String   @id @default(uuid())
+   email      String   @unique
+   name       String?
+   password   String // hashed
+   role       String   @default("SUPERVISOR") // ADMIN, SAFETY_MANAGER, SUPERVISOR, WORKER
+   status     String   @default("ACTIVE") // ACTIVE, BANNED, DELETED
+   apiKey     String?  @unique // For API key authentication
+   keyEnabled Boolean  @default(true)
+   createdAt  DateTime @default(now())
+   updatedAt  DateTime @updatedAt
+
+   // Relations
+   inspections   Inspection[]   @relation("inspector")
+   incidents     Incident[]     @relation("reporter")
+   auditLogs     AuditLog[]
+   toolboxTalks  ToolboxTalk[]  @relation("toolboxCreator")
+   notifications Notification[]
+   attachments   Attachment[]
+ }
+
+model Site {
+  id        String   @id @default(uuid())
+  name      String
+  lat       Float?
+  lng       Float?
+  address   String?
+  meta      String? // JSON string instead of Json type
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  inspections  Inspection[]
+  incidents    Incident[]
+  toolboxTalks ToolboxTalk[]
+}
+
+model Inspection {
+  id            String   @id @default(uuid())
+  siteId        String
+  site          Site     @relation(fields: [siteId], references: [id])
+  createdById   String
+  createdBy     User     @relation("inspector", fields: [createdById], references: [id])
+  checklist     String // JSON string instead of Json type
+  status        String // e.g., completed, draft
+  localClientId String? // client's local UUID for sync mapping
+  version       Int      @default(1)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  attachments Attachment[]
+  auditLogs   AuditLog[]
+}
+
+model Incident {
+  id            String   @id @default(uuid())
+  siteId        String
+  site          Site     @relation(fields: [siteId], references: [id])
+  reportedById  String
+  reportedBy    User     @relation("reporter", fields: [reportedById], references: [id])
+  type          String
+  severity      Int
+  description   String?
+  location      String? // JSON string instead of Json type
+  localClientId String?
+  version       Int      @default(1)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  attachments Attachment[]
+  auditLogs   AuditLog[]
+}
+
+model ToolboxTalk {
+  id            String    @id @default(uuid())
+  siteId        String
+  site          Site      @relation(fields: [siteId], references: [id])
+  createdById   String
+  createdBy     User      @relation("toolboxCreator", fields: [createdById], references: [id])
+  title         String
+  agenda        String
+  attendees     String // JSON string instead of Json type
+  scheduledAt   DateTime?
+  completedAt   DateTime?
+  status        String    @default("scheduled") // scheduled, completed, cancelled
+  localClientId String?
+  version       Int       @default(1)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  attachments Attachment[]
+  auditLogs   AuditLog[]
+}
+
+model Attachment {
+  id          String   @id @default(uuid())
+  filename    String
+  mimeType    String
+  size        Int
+  storagePath String // object store key or server path
+  uploaded    Boolean  @default(false)
+  checksum    String?
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+
+  // Relations
+  linkedEntity  String? // e.g., "Inspection" or "Incident" or "ToolboxTalk"
+  linkedId      String? // entity id
+  Inspection    Inspection?  @relation(fields: [inspectionId], references: [id])
+  inspectionId  String?
+  Incident      Incident?    @relation(fields: [incidentId], references: [id])
+  incidentId    String?
+  ToolboxTalk   ToolboxTalk? @relation(fields: [toolboxTalkId], references: [id])
+  toolboxTalkId String?
+}
+
+model AuditLog {
+  id            String       @id @default(uuid())
+  userId        String?
+  user          User?        @relation(fields: [userId], references: [id])
+  action        String // CREATE/UPDATE/DELETE/SYNC
+  entity        String
+  entityId      String
+  payload       String? // JSON string instead of Json type
+  createdAt     DateTime     @default(now())
+  Inspection    Inspection?  @relation(fields: [inspectionId], references: [id])
+  inspectionId  String?
+  Incident      Incident?    @relation(fields: [incidentId], references: [id])
+  incidentId    String?
+  ToolboxTalk   ToolboxTalk? @relation(fields: [toolboxTalkId], references: [id])
+  toolboxTalkId String?
+}
+
+model SyncQueue {
+  id        String   @id @default(uuid())
+  clientId  String
+  opId      String   @unique
+  opType    String // create/update/delete
+  entity    String
+  payload   String // JSON string instead of Json type
+  localId   String?
+  status    String   @default("pending") // pending/processing/completed/failed
+  attempts  Int      @default(0)
+  lastError String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  type      String // safety_alert, inspection_due, incident_review, sync_error
+  title     String
+  message   String
+  data      String? // JSON string instead of Json type
+  read      Boolean  @default(false)
+  priority  String   @default("normal") // low/normal/high/critical
+  createdAt DateTime @default(now())
+
+  // Relations
+  relatedEntity String? // entity type if linked
+  relatedId     String? // entity ID if linked
+}
+
+model Reminder {
+  id          String    @id @default(uuid())
+  type        String // inspection, toolbox_talk, safety_check
+  entityId    String // ID of the entity to remind about
+  entityType  String // Inspection, ToolboxTalk, etc.
+  scheduledAt DateTime
+  sentAt      DateTime?
+  status      String    @default("pending") // pending/sent/cancelled
+  createdAt   DateTime  @default(now())
+
+  // Relations
+  assignedTo String? // User ID
+  siteId     String?
+}
