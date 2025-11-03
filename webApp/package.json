@@ -5,9 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:tauri": "npx tauri dev",
     "build": "vite build",
     "build:pd": "npx vite build --mode production && npx workbox-cli generateSW workbox-config.mjs",
     "build:sw": "npx workbox-cli injectManifest workbox-config.mjs",
+    "build:tauri": "npx tauri build",
+    "build:android": "npx cap sync android && cd android && ./gradlew bundleRelease && cd ..",
+    "build:ios": "npx cap sync ios && npx cap open ios",
     "lint": "eslint .",
     "preview": "vite preview"
   },

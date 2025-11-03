@@ -16,7 +16,7 @@ importers:
         version: 2.4.3
       cloudinary:
         specifier: ^2.7.0
-        version: 2.7.0
+        version: 2.8.0
       cookie-parser:
         specifier: ^1.4.6
         version: 1.4.7
@@ -50,7 +50,7 @@ importers:
     devDependencies:
       '@types/node':
         specifier: ^20.0.0
-        version: 20.19.22
+        version: 20.19.24
       nodemon:
         specifier: ^3.0.0
         version: 3.1.10
@@ -128,8 +128,8 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
-  '@types/node@20.19.22':
-    resolution: {integrity: sha512-hRnu+5qggKDSyWHlnmThnUqg62l29Aj/6vcYgUaSFL9oc7DVjeWEQN3PRgdSc6F8d9QRMWkf36CLMch1Do/+RQ==}
+  '@types/node@20.19.24':
+    resolution: {integrity: sha512-FE5u0ezmi6y9OZEzlJfg37mqqf6ZDSF2V/NLjUyGrR9uTZ7Sb9F7bLNZ03S4XVUNRWGA7Ck4c1kK+YnuWjl+DA==}
 
   abort-controller@3.0.0:
     resolution: {integrity: sha512-h8lQ8tacZYnR3vNQTgibj+tODHI5/+l06Au2Pcriv/Gmet0eaj4TwWH41sO9wnHDiQsEj19q0drzdWdeAHtweg==}
@@ -234,8 +234,8 @@ packages:
     resolution: {integrity: sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==}
     engines: {node: '>= 8.10.0'}
 
-  cloudinary@2.7.0:
-    resolution: {integrity: sha512-qrqDn31+qkMCzKu1GfRpzPNAO86jchcNwEHCUiqvPHNSFqu7FTNF9FuAkBUyvM1CFFgFPu64NT0DyeREwLwK0w==}
+  cloudinary@2.8.0:
+    resolution: {integrity: sha512-s7frvR0HnQXeJsQSIsbLa/I09IMb1lOnVLEDH5b5E53WTiCYgrNNOBGV/i/nLHwrcEOUkqjfSwP1+enXWNYmdw==}
     engines: {node: '>=9'}
 
   commander@6.2.0:
@@ -959,8 +959,8 @@ packages:
     resolution: {integrity: sha512-nF7oMeL4KypldrQhac8RyHerJeGPD1p2xDh900GPvc+Nk7nWP6jX2FcC7WmkinMoAmoO774+AFXcWsW8gMWEIg==}
     engines: {node: '>=10'}
 
-  swagger-ui-dist@5.29.5:
-    resolution: {integrity: sha512-2zFnjONgLXlz8gLToRKvXHKJdqXF6UGgCmv65i8T6i/UrjDNyV1fIQ7FauZA40SaivlGKEvW2tw9XDyDhfcXqQ==}
+  swagger-ui-dist@5.30.1:
+    resolution: {integrity: sha512-4mNAUM31sr52K3JcK9qiGbfsFKNh/dm3PkEe+F9FAM31YY/NoRYUgsR/L6d7LLFn6PgZXtBG2ygp8+7UnpUIPg==}
 
   swagger-ui-express@5.0.1:
     resolution: {integrity: sha512-SrNU3RiBGTLLmFU8GIJdOdanJTl4TOmT27tt3bWWHppqYmAZ6IDuEuBvMU6nZq0zLEe6b/1rACXCgLZqO6ZfrA==}
@@ -1041,8 +1041,8 @@ packages:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     hasBin: true
 
-  validator@13.15.15:
-    resolution: {integrity: sha512-BgWVbCI72aIQy937xbawcs+hrVaN/CZ2UwutgaJ36hGqRrLNM+f5LUT/YPRbo8IV/ASeFzXszezV+y2+rq3l8A==}
+  validator@13.15.20:
+    resolution: {integrity: sha512-KxPOq3V2LmfQPP4eqf3Mq/zrT0Dqp2Vmx2Bn285LwVahLc+CsxOM0crBHczm8ijlcjZ0Q5Xd6LW3z3odTPnlrw==}
     engines: {node: '>= 0.10'}
 
   vary@1.1.2:
@@ -1191,7 +1191,7 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
-  '@types/node@20.19.22':
+  '@types/node@20.19.24':
     dependencies:
       undici-types: 6.21.0
 
@@ -1327,7 +1327,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  cloudinary@2.7.0:
+  cloudinary@2.8.0:
     dependencies:
       lodash: 4.17.21
       q: 1.5.1
@@ -2105,14 +2105,14 @@ snapshots:
     transitivePeerDependencies:
       - openapi-types
 
-  swagger-ui-dist@5.29.5:
+  swagger-ui-dist@5.30.1:
     dependencies:
       '@scarf/scarf': 1.4.0
 
   swagger-ui-express@5.0.1(express@4.21.2):
     dependencies:
       express: 4.21.2
-      swagger-ui-dist: 5.29.5
+      swagger-ui-dist: 5.30.1
 
   teeny-request@7.2.0:
     dependencies:
@@ -2189,7 +2189,7 @@ snapshots:
 
   uuid@9.0.1: {}
 
-  validator@13.15.15: {}
+  validator@13.15.20: {}
 
   vary@1.1.2: {}
 
@@ -2240,6 +2240,6 @@ snapshots:
     dependencies:
       lodash.get: 4.4.2
       lodash.isequal: 4.5.0
-      validator: 13.15.15
+      validator: 13.15.20
     optionalDependencies:
       commander: 9.5.0

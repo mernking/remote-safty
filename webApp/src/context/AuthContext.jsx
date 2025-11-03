@@ -1,12 +1,12 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
+import { createContext, useContext, useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 const AuthContext = createContext();
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
@@ -22,8 +22,8 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuthStatus = async () => {
     try {
-      const response = await fetch('/api/v1/auth/me', {
-        credentials: 'include' // Include cookies
+      const response = await fetch("/api/v1/auth/me", {
+        credentials: "include", // Include cookies
       });
 
       if (response.ok) {
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
         setUser(data.user);
       }
     } catch (error) {
-      console.error('Auth check failed:', error);
+      console.error("Auth check failed:", error);
     } finally {
       setLoading(false);
     }
@@ -41,27 +41,56 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
 
-      const response = await fetch('/api/v1/auth/login', {
-        method: 'POST',
+      const response = await fetch("/api/v1/auth/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        credentials: 'include', // Include cookies
+        credentials: "include", // Include cookies
         body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
+        throw new Error(data.message || "Login failed");
       }
 
       setUser(data.user);
       toast.success(`Welcome back, ${data.user.name || data.user.email}!`);
       return data;
-
     } catch (error) {
-      toast.error(error.message || 'Login failed');
+      toast.error(error.message || "Login failed");
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const signup = async (email, password, name) => {
+    try {
+      setLoading(true);
+
+      const response = await fetch("/api/v1/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // Include cookies
+        body: JSON.stringify({ email, password, name }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Signup failed");
+      }
+
+      setUser(data.user);
+      toast.success(`Welcome, ${data.user.name || data.user.email}!`);
+      return data;
+    } catch (error) {
+      toast.error(error.message || "Signup failed");
       throw error;
     } finally {
       setLoading(false);
@@ -70,16 +99,15 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await fetch('/api/v1/auth/logout', {
-        method: 'POST',
-        credentials: 'include',
+      await fetch("/api/v1/auth/logout", {
+        method: "POST",
+        credentials: "include",
       });
 
       setUser(null);
-      toast.info('Logged out successfully');
-
+      toast.info("Logged out successfully");
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
       // Still clear user state even if API call fails
       setUser(null);
     }
@@ -87,9 +115,9 @@ export const AuthProvider = ({ children }) => {
 
   const refreshToken = async () => {
     try {
-      const response = await fetch('/api/v1/auth/refresh', {
-        method: 'POST',
-        credentials: 'include',
+      const response = await fetch("/api/v1/auth/refresh", {
+        method: "POST",
+        credentials: "include",
       });
 
       if (response.ok) {
@@ -99,7 +127,7 @@ export const AuthProvider = ({ children }) => {
       } else {
         // Token refresh failed, user needs to login again
         setUser(null);
-        throw new Error('Session expired');
+        throw new Error("Session expired");
       }
     } catch (error) {
       setUser(null);
@@ -109,27 +137,26 @@ export const AuthProvider = ({ children }) => {
 
   const updateProfile = async (updates) => {
     try {
-      const response = await fetch('/api/v1/users/me', {
-        method: 'PUT',
+      const response = await fetch("/api/v1/users/me", {
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
         body: JSON.stringify(updates),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Profile update failed');
+        throw new Error(data.message || "Profile update failed");
       }
 
       setUser(data.user);
-      toast.success('Profile updated successfully');
+      toast.success("Profile updated successfully");
       return data;
-
     } catch (error) {
-      toast.error(error.message || 'Profile update failed');
+      toast.error(error.message || "Profile update failed");
       throw error;
     }
   };
@@ -138,17 +165,14 @@ export const AuthProvider = ({ children }) => {
     user,
     loading,
     login,
+    signup,
     logout,
     refreshToken,
     updateProfile,
     isAuthenticated: !!user,
-    isAdmin: user?.role === 'ADMIN',
-    isSafetyManager: user?.role === 'SAFETY_MANAGER' || user?.role === 'ADMIN',
+    isAdmin: user?.role === "ADMIN",
+    isSafetyManager: user?.role === "SAFETY_MANAGER" || user?.role === "ADMIN",
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

@@ -1,17 +1,27 @@
 export default {
-  swSrc: 'src/sw.js',
-  swDest: 'dist/sw.js',
-  globDirectory: 'dist/',
-  globPatterns: [
-    '**/*.{css,js,html,png,jpg,jpeg,svg,ico,json}'
+  swSrc: "src/sw.js",
+  swDest: "dist/sw.js",
+  globDirectory: "dist/",
+  icons: [
+    {
+      src: "/icons/icon-192x192.png",
+      sizes: "192x192",
+      type: "image/png",
+    },
+    {
+      src: "/icons/icon-512x512.png",
+      sizes: "512x512",
+      type: "image/png",
+    },
   ],
+  globPatterns: ["**/*.{css,js,html,png,jpg,jpeg,svg,ico,json}"],
   maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB
   runtimeCaching: [
     {
       urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-      handler: 'StaleWhileRevalidate',
+      handler: "StaleWhileRevalidate",
       options: {
-        cacheName: 'google-fonts-stylesheets',
+        cacheName: "google-fonts-stylesheets",
         expiration: {
           maxEntries: 4,
           maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
@@ -20,9 +30,9 @@ export default {
     },
     {
       urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-      handler: 'CacheFirst',
+      handler: "CacheFirst",
       options: {
-        cacheName: 'google-fonts-webfonts',
+        cacheName: "google-fonts-webfonts",
         expiration: {
           maxEntries: 4,
           maxAgeSeconds: 1 * 365 * 24 * 60 * 60, // 1 year
@@ -31,9 +41,9 @@ export default {
     },
     {
       urlPattern: /^\/api\/.*/i,
-      handler: 'NetworkFirst',
+      handler: "NetworkFirst",
       options: {
-        cacheName: 'api-cache',
+        cacheName: "api-cache",
         networkTimeoutSeconds: 10,
         expiration: {
           maxEntries: 100,
@@ -41,7 +51,7 @@ export default {
         },
         cacheKeyWillBeUsed: async ({ request }) => {
           // Don't cache POST, PUT, DELETE requests
-          if (['POST', 'PUT', 'DELETE'].includes(request.method)) {
+          if (["POST", "PUT", "DELETE"].includes(request.method)) {
             return undefined;
           }
           return request.url;
@@ -50,9 +60,9 @@ export default {
     },
     {
       urlPattern: /\.(?:png|gif|jpg|jpeg|svg|webp)$/,
-      handler: 'CacheFirst',
+      handler: "CacheFirst",
       options: {
-        cacheName: 'images',
+        cacheName: "images",
         expiration: {
           maxEntries: 50,
           maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
@@ -64,6 +74,6 @@ export default {
   clientsClaim: true,
   cleanupOutdatedCaches: true,
   sourcemap: false,
-  mode: 'production',
+  mode: "production",
   inlineWorkboxRuntime: false,
 };

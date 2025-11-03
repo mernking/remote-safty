@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Mail, Lock, User, Building2, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 export default function Signup() {
+  const { signup } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
-    company: "",
     password: "",
     confirmPassword: "",
   });
@@ -18,9 +20,21 @@ export default function Signup() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Signup attempt:", formData);
+
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    try {
+      await signup(formData.email, formData.password, formData.fullName);
+       navigate("/login");
+      // Redirect or success handling will be done by the auth context
+    } catch (error) {
+      // Error is handled by the auth context toast
+    }
   };
 
   return (
@@ -78,26 +92,6 @@ export default function Signup() {
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-text mb-2">
-                Company
-              </label>
-              <div className="relative">
-                <Building2
-                  className="absolute left-3 top-3 text-text-light"
-                  size={20}
-                />
-                <input
-                  type="text"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleChange}
-                  placeholder="Your Company"
-                  className="w-full pl-10 pr-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  required
-                />
-              </div>
-            </div>
 
             <div>
               <label className="block text-sm font-medium text-text mb-2">

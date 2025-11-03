@@ -294,6 +294,138 @@ router.get('/me', authenticate, async (req, res) => {
 
 /**
  * @swagger
+ * /api/v1/auth/signup:
+ *   post:
+ *     summary: Create a new user account
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: User's email address
+ *               password:
+ *                 type: string
+ *                 minLength: 6
+ *                 description: User's password
+ *               name:
+ *                 type: string
+ *                 description: User's full name (optional)
+ *     responses:
+ *       201:
+ *         description: User created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 accessToken:
+ *                   type: string
+ *                 refreshToken:
+ *                   type: string
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Validation error or user already exists
+ *       500:
+ *         description: Internal server error
+ */
+router.post('/signup', async (req, res) => {
+  try {
+    const { email, password, name } = req.body;
+    const prisma = req.app.get('prisma');
+
+    if (!email || !password) {
+      return res.status(400).json({
+        error: 'Validation error',
+        message: 'Email and password are required'
+      });
+    }
+
+    // Check if email already exists
+    const existingUser = await prisma.user.findUnique({
+      where: { email: email.toLowerCase() }
+    });
+
+    if (existingUser) {
+      return res.status(400).json({
+        error: 'User already exists',
+        message: 'An account with this email already exists'
+      });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    // Generate API key
+    const apiKey = generateApiKey();
+
+    // Create user
+    const user = await prisma.user.create({
+      data: {
+        email: email.toLowerCase(),
+        password: hashedPassword,
+        name: name || null,
+        apiKey,
+        keyEnabled: true,
+        role: 'SUPERVISOR',
+        status: 'ACTIVE'
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        apiKey: true,
+        keyEnabled: true
+      }
+    });
+
+    // Generate tokens
+    const accessToken = generateToken(user.id);
+    const refreshToken = generateRefreshToken(user.id);
+
+    // Set refresh token as httpOnly cookie
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
+
+    // Set access token as regular cookie for frontend convenience
+    res.cookie('token', accessToken, {
+      httpOnly: false,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    });
+
+    res.status(201).json({
+      accessToken,
+      refreshToken,
+      user
+    });
+
+  } catch (error) {
+    console.error('Signup error:', error);
+    res.status(500).json({
+      error: 'Signup failed',
+      message: 'An error occurred during signup'
+    });
+  }
+});
+
+/**
+ * @swagger
  * /api/v1/auth/generate-api-key:
  *   post:
  *     summary: Generate or regenerate API key for authenticated user

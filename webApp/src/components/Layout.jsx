@@ -127,7 +127,7 @@ const Layout = ({ children }) => {
             </ul>
           </div>
           <Link to="/dashboard" className="btn btn-ghost normal-case text-xl">
-            Safety Compliance
+            Safety App
           </Link>
         </div>
 

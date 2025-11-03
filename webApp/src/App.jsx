@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 // Components
 import Login from "./components/Login";
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./components/pages/Dashboard";
 import Sites from "./components/pages/Sites";
 import SiteDetail from "./components/pages/SiteDetail";
 import NewSite from "./components/pages/NewSite";
@@ -38,12 +38,12 @@ import Layout from "./components/Layout";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { SyncProvider } from "./context/SyncContext";
 import NoAuthLayout from "./components/NoAuthLayout";
-import Home from "./components/pagesNoAuth/Home";
-import Signup from "./components/pagesNoAuth/Signup";
-import BugReport from "./components/pagesNoAuth/BugReport";
-import Community from "./components/pagesNoAuth/Community";
-import Contact from "./components/pagesNoAuth/Contact";
-import Support from "./components/pagesNoAuth/Support";
+import Home from "./components/Home";
+import Signup from "./components/Signup";
+import BugReport from "./components/BugReport";
+import Community from "./components/Community";
+import Contact from "./components/Contact";
+import Support from "./components/Support";
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
