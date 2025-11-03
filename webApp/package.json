@@ -7,8 +7,6 @@
     "dev": "vite",
     "dev:tauri": "npx tauri dev",
     "build": "vite build",
-    "build:pd": "npx vite build --mode production && npx workbox-cli generateSW workbox-config.mjs",
-    "build:sw": "npx workbox-cli injectManifest workbox-config.mjs",
     "build:tauri": "npx tauri build",
     "build:android": "npx cap sync android && cd android && ./gradlew bundleRelease && cd ..",
     "build:ios": "npx cap sync ios && npx cap open ios",
@@ -45,6 +43,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
-    "vite": "^7.1.7"
+    "vite": "^7.1.7",
+    "vite-plugin-pwa": "^1.1.0"
   }
 }

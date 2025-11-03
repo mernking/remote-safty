@@ -365,6 +365,8 @@ const AppRoutes = () => {
   );
 };
 
+import InstallPWA from "./components/InstallPWA";
+
 // Main App Component
 function App() {
   return (
@@ -372,6 +374,7 @@ function App() {
       <SyncProvider>
         <Router>
           <div className="min-h-screen bg-background">
+            <InstallPWA />
             <AppRoutes />
             <ToastContainer
               position="top-right"
