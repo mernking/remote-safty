@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:tauri": "npx tauri dev",
     "build": "vite build",
+    "dev:tauri": "npx tauri dev",
     "build:tauri": "npx tauri build",
     "build:android": "npx cap sync android && cd android && ./gradlew bundleRelease && cd ..",
     "build:ios": "npx cap sync ios && npx cap open ios",

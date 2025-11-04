@@ -8,7 +8,7 @@
    * * The second part is your actual image.
    */
   background-image: linear-gradient(rgba(0, 0, 0, 0.829), rgba(0, 0, 0, 0.658)),
-    url("/images/ttten.svg");
+    url("/images/image.png");
 
   background-size: cover;
   background-position: center;

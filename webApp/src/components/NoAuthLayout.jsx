@@ -5,9 +5,9 @@ import Footer from "./fragments/Footer";
 export default function NoAuthLayout({ children }) {
   return (
     <div>
-      <Navbar />
+      {/* <Navbar /> */}
       <main>{children}</main>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

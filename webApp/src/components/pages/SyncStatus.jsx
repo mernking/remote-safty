@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { useSync } from '../../context/SyncContext';
 import { RefreshCw, Wifi, WifiOff, Clock, CheckCircle, XCircle, AlertTriangle, Database, Smartphone } from 'lucide-react';
 import { db } from '../../db.js';
-import { DemoDataGenerator } from '../DemoDataGenerator.jsx';
-import { CameraTest } from '../CameraTest.jsx';
 
 const SyncStatus = () => {
   const {
@@ -369,12 +367,6 @@ const SyncStatus = () => {
           </div>
         </div>
       )}
-
-      {/* Demo Data Generator */}
-      <DemoDataGenerator />
-
-      {/* Camera Test */}
-      <CameraTest />
 
       {/* Sync Tips */}
       <div className="card bg-info/10 border-info shadow-lg">

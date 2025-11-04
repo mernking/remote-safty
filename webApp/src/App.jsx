@@ -8,7 +8,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Components
-import Login from "./components/Login";
 import Dashboard from "./components/pages/Dashboard";
 import Sites from "./components/pages/Sites";
 import SiteDetail from "./components/pages/SiteDetail";
@@ -40,10 +39,7 @@ import { SyncProvider } from "./context/SyncContext";
 import NoAuthLayout from "./components/NoAuthLayout";
 import Home from "./components/Home";
 import Signup from "./components/Signup";
-import BugReport from "./components/BugReport";
-import Community from "./components/Community";
-import Contact from "./components/Contact";
-import Support from "./components/Support";
+import Login from "./components/Login";
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -69,38 +65,6 @@ const AppRoutes = () => {
         element={
           <NoAuthLayout>
             <Home />
-          </NoAuthLayout>
-        }
-      />
-      <Route
-        path="/bug-report"
-        element={
-          <NoAuthLayout>
-            <BugReport />
-          </NoAuthLayout>
-        }
-      />
-      <Route
-        path="/contact"
-        element={
-          <NoAuthLayout>
-            <Contact />
-          </NoAuthLayout>
-        }
-      />
-      <Route
-        path="/support"
-        element={
-          <NoAuthLayout>
-            <Support />
-          </NoAuthLayout>
-        }
-      />
-      <Route
-        path="/community"
-        element={
-          <NoAuthLayout>
-            <Community />
           </NoAuthLayout>
         }
       />
